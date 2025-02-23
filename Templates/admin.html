@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <title>Admin - Tiny App</title>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <h2>Quản lý người dùng</h2>
+    <table border="1">
+        <tr>
+            <th>Tài khoản</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        {% for username, user in users.items() %}
+        <tr>
+            <td>{{ username }}</td>
+            <td>{{ 'Blocked' if user['blocked'] else 'Active' }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <button name="action" value="block" type="submit">Block</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <button name="action" value="reset" type="submit">Reset Password</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    {% endwith %}
+    <p><a href="{{ url_for('home') }}">Home</a></p>
+</body>
+</html>
