@@ -1,13 +1,14 @@
 #!/bin/bash
-# Nếu chưa có virtual environment thì tạo
-if [ ! -d "venv" ]; then
-    python3 -m venv venv
-fi
-
-# Kích hoạt môi trường ảo
+# Tạo và kích hoạt virtual environment
+python3 -m venv venv
 source venv/bin/activate
 
-# Cài đặt các package cần thiết
+# Cài đặt các gói cần thiết
 pip install -r requirements.txt
 
-echo "Cài đặt hoàn tất. Bạn có thể chạy ứng dụng với lệnh: flask run"
+# Khởi tạo DB
+python -c "from app import db, app; app.app_context().push(); db.create_all()"
+
+echo "Cài đặt hoàn tất. Để chạy server: "
+echo "  source venv/bin/activate"
+echo "  python app.py"

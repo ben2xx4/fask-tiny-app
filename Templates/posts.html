@@ -1,36 +1,285 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-    <title>Quản lý bài viết - Tiny App</title>
+  <meta charset="UTF-8">
+  <title>Quản lý Bài viết</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <style>
+    /* Custom Styles */
+    body {
+      background: linear-gradient(135deg,rgb(0, 0, 0),rgb(44, 22, 66));
+      min-height: 100vh;
+      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    h5.card-title {
+      color: #764ba2;
+      font-weight: 600;
+    }
+
+    .form-label {
+      color: #444;
+      font-weight: 500;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary {
+      border-radius: 10px;
+      padding: 12px 30px;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      border: none;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #5a6cd8, #683f92);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      border-radius: 10px;
+      padding: 10px 25px;
+      background: #dc3545;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+    }
+
+    .table {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table thead {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+    }
+
+    .table th {
+      font-weight: 600;
+      padding: 15px;
+    }
+
+    .table tbody tr {
+      transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+      background: #f5f6ff;
+    }
+
+    .alert {
+      border-radius: 10px;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid #667eea;
+      color: #2c3e50;
+    }
+
+    .pagination-btn {
+      border-radius: 8px;
+      padding: 8px 20px;
+      border: 1px solid #667eea;
+      color: #667eea;
+      transition: all 0.3s ease;
+    }
+
+    .pagination-btn:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-link {
+      color: #764ba2;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-link:hover {
+      color: #683f92;
+      text-decoration: underline;
+    }
+
+    img {
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.1);
+    }
+  </style>
 </head>
 <body>
-    <h1>Quản lý bài viết / nhiệm vụ</h1>
-    <form method="POST">
-        <table border="1">
-            <tr>
-                <th>Chọn</th>
-                <th>ID</th>
-                <th>Tiêu đề</th>
-            </tr>
-            {% for post in posts %}
-            <tr>
-                <td><input type="checkbox" name="post_ids" value="{{ post.id }}"></td>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        <input type="submit" value="Xóa các mục đã chọn">
-    </form>
-    {% with messages = get_flashed_messages(with_categories=true) %}
+  <div class="container my-5 animate__animated animate__fadeIn">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
       {% if messages %}
-      <ul>
-        {% for category, message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-      </ul>
+        <div class="alert alert-info animate__animated animate__fadeIn">
+          {% for message in messages %}
+            <div>{{ message }}</div>
+          {% endfor %}
+        </div>
       {% endif %}
     {% endwith %}
-    <p><a href="{{ url_for('home') }}">Home</a></p>
+
+    <h1 class="animate__animated animate__fadeInDown">Quản lý Bài viết</h1>
+
+    <!-- Form tạo bài viết mới -->
+    <div class="card mb-5 animate__animated animate__fadeInUp">
+      <div class="card-body">
+        <h5 class="card-title">Tạo bài viết</h5>
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="title" class="form-label">Tiêu đề</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="title" 
+              name="title" 
+              placeholder="Nhập tiêu đề bài viết" 
+              required>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Nội dung</label>
+            <textarea 
+              class="form-control" 
+              id="content" 
+              name="content" 
+              rows="4"
+              placeholder="Nhập nội dung bài viết"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="image_url" class="form-label">URL Hình ảnh</label>
+            <input 
+              type="url" 
+              class="form-control" 
+              id="image_url" 
+              name="image_url" 
+              placeholder="Nhập URL hình ảnh (ví dụ: https://example.com/image.jpg)">
+          </div>
+          <button type="submit" class="btn btn-primary">Tạo bài viết</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Danh sách bài viết -->
+    <h5 class="mb-3">Danh sách Bài viết</h5>
+    {% if posts %}
+      <form method="POST" action="{{ url_for('delete_posts') }}">
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead>
+              <tr>
+                <th scope="col" style="width: 50px;">Chọn</th>
+                <th scope="col">Tiêu đề</th>
+                <th scope="col">Nội dung</th>
+                <th scope="col">Hình ảnh</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in posts %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="post_ids" value="{{ p.id }}">
+                </td>
+                <td>{{ p.title }}</td>
+                <td>{{ p.content }}</td>
+                <td>
+                  {% if p.image_url %}
+                    <img src="{{ p.image_url }}" alt="{{ p.title }}" style="max-width: 100px;">
+                  {% else %}
+                    Không có hình
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <button type="submit" class="btn btn-danger mt-3">Xóa mục đã chọn</button>
+      </form>
+    {% else %}
+      <p class="text-muted">Chưa có bài viết nào.</p>
+    {% endif %}
+
+    <!-- Phân trang -->
+    <div class="mt-5 d-flex align-items-center justify-content-center">
+      {% if pagination.has_prev %}
+        <a href="{{ url_for('posts', page=pagination.prev_num) }}" class="btn btn-outline-secondary btn-sm pagination-btn">Trang trước</a>
+      {% endif %}
+      <span class="mx-3 fw-bold" style="color: #764ba2;">Trang {{ pagination.page }} / {{ pagination.pages }}</span>
+      {% if pagination.has_next %}
+        <a href="{{ url_for('posts', page=pagination.next_num) }}" class="btn btn-outline-secondary btn-sm pagination-btn">Trang sau</a>
+      {% endif %}
+    </div>
+
+    <div class="mt-4 text-center">
+      <a href="{{ url_for('home') }}" class="btn btn-link">Quay lại trang chủ</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Xác nhận xóa
+    document.querySelector('form[action="{{ url_for('delete_posts') }}"]').addEventListener('submit', function(e) {
+      if (!confirm('Bạn có chắc muốn xóa các bài viết đã chọn?')) {
+        e.preventDefault();
+      }
+    });
+  </script>
 </body>
 </html>

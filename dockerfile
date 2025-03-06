@@ -1,22 +1,20 @@
-# Sử dụng image Python chính thức làm base
+# Sử dụng Python 3.9 (hoặc 3.x)
 FROM python:3.9-slim
 
-# Thiết lập thư mục làm việc
+# Tạo thư mục làm việc
 WORKDIR /app
 
-# Copy file requirements.txt và cài đặt các dependency
-COPY requirements.txt requirements.txt
+# Sao chép file requirements
+COPY requirements.txt /app
+
+# Cài đặt các thư viện
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy toàn bộ mã nguồn vào container
-COPY . .
+# Sao chép toàn bộ mã nguồn
+COPY . /app
 
-# Expose cổng 5000 (mặc định của Flask)
+# Mở cổng 5000
 EXPOSE 5000
 
-# Thiết lập biến môi trường cho Flask
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
-# Chạy ứng dụng
-CMD ["flask", "run"]
+# Khởi chạy ứng dụng
+CMD ["python", "app.py"]
