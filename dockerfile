@@ -18,3 +18,6 @@ EXPOSE 5000
 
 # Khởi chạy ứng dụng
 CMD ["python", "app.py"]
+
+#để database được đồng bộ từ docker: run bash : docker run -p 5000:5000 -v $(pwd)/data:/app my-flask-app
+
